@@ -1,6 +1,7 @@
 import User from './User'
 import { useState, useEffect } from 'react'
 import peoples from '../../persons'
+import './Pagination.css'
 
 
 const makeArray = (number) => {
@@ -14,11 +15,8 @@ const makeArray = (number) => {
 }
 
 const Pagination = () => {
-
     const [users, setUsers] = useState(peoples)
     const [pagedUsers, setPagedUsers] = useState(users.slice(0, 10))
-
-    // const [pages, setPages] = useState()
 
     const [rowsPerPage, setRowsPerPage] = useState(makeArray(5))
     const [pages, setPages] = useState([])
@@ -38,15 +36,15 @@ const Pagination = () => {
         let pages = []
         let start = 0
 
-        for (let end=0; end<peoples.length; end+=1){
-
+        for (let end=0; end <= peoples.length; end+=1){
             if(end == rowsPerPage){
                 pages.push([peoples.slice(start, end)])
-
                 start = end
                 rowsPerPage += Math.round(users.length/value)
             }
         }
+
+        console.log('length: ', pages.length)
 
         setPages(pages)
         setRowsPerPage(makeArray(value))
@@ -55,13 +53,16 @@ const Pagination = () => {
     const handlePageChange = (e) => {
         const value = e.target.value
 
+        console.log(pages)
+        console.log(value)
+
         setPagedUsers(pages[value][0])
     }
 
 
     return (
         <>
-        <div>Pagination</div>
+        <h1>React Pagination</h1>
 
         <form>
             <select onChange={handleSubmit} type="submit">
@@ -89,14 +90,9 @@ const Pagination = () => {
 
         <div className="buttons">
             {rowsPerPage.map( (value, idx) => (
-
                 <button key={idx} onClick={handlePageChange} value={value}>{value+1}</button>
-
             ))}
-            
         </div>
-
-
         </>
     )
 }
