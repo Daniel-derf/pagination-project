@@ -5,41 +5,44 @@ import './Pagination.css'
 
 
 const Pagination = () => {
-    const [users] = useState(peoples)
-    const [pagedUsers, setPagedUsers] = useState(users.slice(0, 5))
-    const [rowsPerPage, setRowsPerPage] = useState(5)
-    const [pages, setPages] = useState([])
+    
+    const [paginatedUsers, setPaginatedUsers] = useState(peoples.slice(0, 10)) 
+    const [usersArrays, setUsersArrays] = useState([])
 
     useEffect(() => {
-        updatePages(rowsPerPage)
-    }, [users, rowsPerPage])
+        handleSubmit({target:{
+            value: "10"
+        }})
+    }, []
+    )
 
-    const updatePages = (rowsPerPage) => {
-        const pages = []
-        for (let start = 0; start < users.length; start += rowsPerPage) {
-            pages.push(users.slice(start, start + rowsPerPage))
+    const handleSubmit = (e) => {
+        const rows = parseInt(e.target.value)
+        let idx=0
+
+        const users = []
+        for(let i=0; i<peoples.length; i+=rows){
+            users[idx] = peoples.slice(i, i+rows)
+            idx+=1
         }
-        setPages(pages)
-        setPagedUsers(pages[0] || [])
+
+        setPaginatedUsers(users[0])
+        setUsersArrays(users)
     }
 
-    const handleRowsChange = (e) => {
-        const value = parseInt(e.target.value, 10)
-        setRowsPerPage(value)
-    }
+    const handlePagination = (e) => {
+        const page = parseInt(e.target.value) 
 
-    const handlePageChange = (e) => {
-        const pageIndex = parseInt(e.target.value, 10)
-        setPagedUsers(pages[pageIndex] || [])
+        setPaginatedUsers(usersArrays[page])
     }
-
+  
     return (
         <>
             <h1>React Pagination</h1>
 
             <form>
                 <label htmlFor="rows-per-page">Rows per page:</label>
-                <select id="rows-per-page" onChange={handleRowsChange} value={rowsPerPage}>
+                <select defaultValue={"10"} onChange={handleSubmit} id="rows-per-page">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -54,18 +57,22 @@ const Pagination = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {pagedUsers.map((user) => (
-                        <User key={user.id} data={user} />
-                    ))}
+                    {
+                        paginatedUsers.map((user, idx) => (
+                            <User key={idx} data={user}/>
+                        ))
+                    }
                 </tbody>
             </table>
 
             <div className="buttons">
-                {pages.map((_, idx) => (
-                    <button key={idx} onClick={handlePageChange} value={idx}>
-                        {idx + 1}
-                    </button>
-                ))}
+                {
+                    usersArrays.map((user,idx) => (
+                        <button onClick={handlePagination} key={idx} value={idx}>
+                            {idx+1}
+                        </button>
+                    ))
+                }
             </div>
         </>
     )
