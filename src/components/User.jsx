@@ -1,15 +1,12 @@
+const User = ({ name, city }) => {
+  return (
+    <>
+      <tr>
+        <td>{name}</td>
+        <td>{city}</td>
+      </tr>
+    </>
+  );
+};
 
-
-const User = ({data}) => {
-
-  
-    return (<>
-        <tr>
-            <td>{data.name}</td>
-            <td>{data.city}</td>
-        </tr>
-    
-    </>)
-}
-
-export default User
+export default User;
