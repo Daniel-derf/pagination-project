@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import peoples from "../../persons";
 
 const Pagination = () => {
-  const [paginatedUsers, setPaginatedUsers] = useState(peoples.slice(0, 10));
+  const [curPage, setCurPage] = useState(0);
   const [usersArr, setUsersArr] = useState([]);
 
   useEffect(() => {
@@ -20,11 +20,10 @@ const Pagination = () => {
     }
 
     setUsersArr(pages);
-    setPaginatedUsers(pages[0]);
   }
 
   function handleChangePage(pageNumber) {
-    setPaginatedUsers(usersArr[pageNumber]);
+    setCurPage(pageNumber);
   }
 
   return (
@@ -47,11 +46,7 @@ const Pagination = () => {
             <td>City</td>
           </tr>
         </thead>
-        <tbody>
-          {paginatedUsers.map((user) => (
-            <User key={user.id} {...user} />
-          ))}
-        </tbody>
+        <tbody>{usersArr[curPage] && usersArr[curPage].map((user) => <User key={user.id} {...user} />)}</tbody>
       </table>
 
       <div className="buttons">
